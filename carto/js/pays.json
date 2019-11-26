@@ -1,0 +1,19 @@
+var DifpaysVisites = {:[
+    {
+		"data": {
+			"prenom": "Naima",
+			"nom": "AFTAB",
+			"pays": {
+				"Italy": 1,
+				"Germany": 1,
+				"Manama": 1,
+				"Turkey": 1,
+				"Pakistan": 2,
+				"United Kingdom": 3,
+				"Spain": 4,
+				"Netherlands": 4,
+				"France": 5,
+			}
+		}
+	},
+]}

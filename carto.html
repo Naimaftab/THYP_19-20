@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta noms="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Cartographie</title>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="carto/css/bootstrap.css">
+        <!-- main css -->
+        <link rel="stylesheet" href="carto/css/style.css">
+		<link rel="stylesheet" href="carto/css/responsive.css">
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+		<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>    
+		<script src="carto/js/Leaflet.CountrySelect.js"></script>
+		<script src="carto/js/leaflet.ajax.min.js"></script>
+		<script src="carto/js/countries.geo.json"></script>
+		<script src="carto/js/pays.json"></script>
+    </head>
+    <body>
+
+    <!--================ Home Banner =================-->
+    <section class="home_banner_area" style="margin-bottom: 0px;">
+		<div class="container box_1620" style="bottom: -80px">			
+			
+        <style>
+            #mapid { 
+                height: 400px; 
+                width: 800px;
+            }        
+        </style>
+        
+	</head>
+	<body>
+		<br>
+    <h1 style="justify-content: center;display: flex; font-weight: 500;"> Pays visités par: <div style="color: #20c997; margin-left: 8px; ">Naima AFTAB </div></h1>
+        </br>
+	<div style="display:flex; justify-content: safe;padding:0 10px 10px; font-size: 12px; box-sizing: border-box; font-weight: 500; ">
+		<div style="border-left:30px solid #ecfd51; line-height: 30px;padding:0 10px 0 4px;display:block;box-sizing: border-box;font-size: 12px;;"> Pays visité 1 fois</div>
+	</br>
+		<div style="border-left:30px solid #5068ec; line-height: 30px;padding:0 10px 0 4px;display:block;box-sizing: border-box;font-size: 12px;;"> Pays visité 2 fois</div>
+	</br>
+		<div style="border-left:30px solid #ff7ade; line-height: 30px;padding:0 10px 0 4px;display:block;box-sizing: border-box;font-size: 12px;;"> Pays visité 3 fois</div>
+	</br>
+		<div style="border-left:30px solid #c529c5; line-height: 30px;padding:0 10px 0 4px;display:block;box-sizing: border-box;font-size: 12px;;"> Pays visité 4 fois</div>
+	</br>
+		<div style="border-left:30px solid #ff812c; line-height: 30px;padding:0 10px 0 4px;display:block;box-sizing: border-box;font-size: 12px;;"> Pays visité + de 5 fois</div>
+	</div>
+
+    <br>
+    <div id = "mapid" style="position: center fixed;"></div>
+
+    <script>
+        var map = L.map('mapid').setView([0,0],1);
+        var DifpaysVisites = {"Italy": 100, 
+                              "Germany": 100, 
+                              "Bahrain": 100, 
+                              "Turkey": 100, 
+                              "Pakistan": 1, 
+                              "United Kingdom": 50, 
+                              "Spain": 30, 
+                              "Netherlands": 30, 
+                              "France": 70 }; 
+        
+        var cartodbAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attribution">CARTO</a>';
+
+        var positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: cartodbAttribution
+        }).addTo(map);
+
+        var select = L.countrySelect({
+            exclude:"French Southern and Antarctic Lands"
+        });
+
+        select.addTo(map);
+
+        select.on('change', function(e) {
+        if(e.feature === undefined) { 
+            return;
+        }
+            var country = L.geoJson(e.feature);
+
+        if(this.previousCountry != null) {
+            map.removeLayer(this.previousCountry);
+            }
+            this.previousCountry = country;
+            map.addLayer(country);
+            map.fitBounds(country.getBounds()); 
+        });
+
+        var colorScale = d3.scaleSequential()
+            .domain([0, 100])
+            .interpolator(d3['interpolatePlasma']);  
+
+        function setColor(noms) {
+            if(DifpaysVisites[noms]>0)
+            return colorScale (DifpaysVisites[noms]);
+            return 'grey';
+        }
+            //var nbAlea = d3.randomUniform(0, 100);
+        function style(feature) {
+            return {
+                fillColor: setColor(feature.properties.noms),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+         L.geoJson(statesData,{style: style}).addTo(map);
+
+    </script>
+    </body>
+</html>
